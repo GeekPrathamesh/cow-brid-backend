@@ -9,7 +9,8 @@ import json
 
 app = Flask(__name__)
 
-CORS(app, resources={r"/*": {"origins": "*"}})
+# Enable CORS for your frontend domain (replace with your Vercel domain)
+CORS(app, resources={r"/*": {"origins": ["https://cow-brid-detection.vercel.app", "http://localhost:5173"]}})
 
 MODEL_PATH = "cow_model.h5"
 CLASSES_JSON = "classes.json"
@@ -50,4 +51,6 @@ def predict():
     return jsonify({"predictions": results})
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
+
