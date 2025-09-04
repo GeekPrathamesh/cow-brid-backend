@@ -8,7 +8,8 @@ import uuid
 import json
 
 app = Flask(__name__)
-CORS(app)
+
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 MODEL_PATH = "cow_model.h5"
 CLASSES_JSON = "classes.json"
