@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cow Breed Classifier</title>
+</head>
+<body>
+  <h2>Upload Cow Images</h2>
+  <form id="upload-form" enctype="multipart/form-data">
+    <input type="file" name="files" id="files" accept="image/*" multiple>
+    <button type="submit">Predict Breeds</button>
+  </form>
+
+  <h3>Results:</h3>
+  <ul id="result-list"></ul>
+
+  <script>
+    document.getElementById("upload-form").onsubmit = async (e) => {
+      e.preventDefault();
+      let formData = new FormData();
+      let files = document.getElementById("files").files;
+      for (let i = 0; i < files.length; i++) {
+        formData.append("files", files[i]);
+      }
+
+      let res = await fetch("/predict", { method: "POST", body: formData });
+      let data = await res.json();
+
+      let resultList = document.getElementById("result-list");
+      resultList.innerHTML = "";
+
+      // Loop over predictions array
+      data.predictions.forEach(item => {
+        let li = document.createElement("li");
+        li.textContent = `${item.filename}: ${item.breed}`;
+        resultList.appendChild(li);
+      });
+    };
+  </script>
+</body>
+</html>
